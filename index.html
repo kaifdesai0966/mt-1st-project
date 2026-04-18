@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medicine Reminder</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="header-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M19 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V5C21 3.89543 20.1046 3 19 3Z"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M12 8V16" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <path d="M8 12H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+            </div>
+            <h1>Medicine Reminder</h1>
+            <p>Stay on track with your health</p>
+        </header>
+
+        <section class="add-reminder-card">
+            <h2>Add New Reminder</h2>
+            <form action="#" class="reminder-form">
+                <div class="input-group">
+                    <label for="med-name">Medicine Name</label>
+                    <input type="text" id="med-name" placeholder="e.g. Amoxicillin, 500mg" required>
+                </div>
+                <div class="row">
+                    <div class="input-group">
+                        <label for="med-date">Date</label>
+                        <input type="date" id="med-date" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="med-time">Time</label>
+                        <input type="time" id="med-time" required>
+                    </div>
+                </div>
+                <button type="button" class="btn-primary">Add Reminder</button>
+            </form>
+        </section>
+
+        <section class="reminder-list">
+            <h2>Upcoming Reminders</h2>
+            <div class="reminder-items">
+                <!-- Sample Item 1 -->
+                <div class="reminder-item">
+                    <div class="reminder-info">
+                        <h3>Vitamin C</h3>
+                        <p>1 Pill, After Breakfast</p>
+                    </div>
+                    <div class="reminder-time">
+                        <span class="time">08:00 AM</span>
+                        <span class="date">Today</span>
+                    </div>
+                    <div class="reminder-status pending"></div>
+                </div>
+
+                <!-- Sample Item 2 -->
+                <div class="reminder-item">
+                    <div class="reminder-info">
+                        <h3>Lisinopril</h3>
+                        <p>10mg, With Water</p>
+                    </div>
+                    <div class="reminder-time">
+                        <span class="time">01:30 PM</span>
+                        <span class="date">Today</span>
+                    </div>
+                    <div class="reminder-status pending"></div>
+                </div>
+
+                <!-- Sample Item 3 -->
+                <div class="reminder-item taken">
+                    <div class="reminder-info">
+                        <h3>Aspirin</h3>
+                        <p>81mg</p>
+                    </div>
+                    <div class="reminder-time">
+                        <span class="time">07:00 AM</span>
+                        <span class="date">Yesterday</span>
+                    </div>
+                    <div class="reminder-status completed">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+
+</html>
