@@ -1,102 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Medicine Reminder</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>MedApp Mobile</title>
+    <!-- Inter Font for minimal app look -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
-    <div class="container">
-        <header>
-            <div class="header-icon">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M19 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V5C21 3.89543 20.1046 3 19 3Z"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                    <path d="M12 8V16" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round" />
-                    <path d="M8 12H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round" />
-                </svg>
+    <div class="mobile-container">
+        
+        <!-- ==================== HOME SCREEN ==================== -->
+        <div id="screen-home" class="screen active">
+            <div class="header">
+                <h1>Hi, User</h1>
+                <p>Your reminders for today</p>
+                <div class="date-badge">18 Apr</div>
             </div>
-            <h1>Medicine Reminder</h1>
-            <p>Stay on track with your health</p>
-        </header>
-
-        <section class="add-reminder-card">
-            <h2>Add New Reminder</h2>
-            <form action="#" class="reminder-form">
-                <div class="input-group">
-                    <label for="med-name">Medicine Name</label>
-                    <input type="text" id="med-name" placeholder="e.g. Amoxicillin, 500mg" required>
-                </div>
-                <div class="row">
-                    <div class="input-group">
-                        <label for="med-date">Date</label>
-                        <input type="date" id="med-date" required>
+            
+            <div class="screen-content">
+                <div class="reminder-list">
+                    <!-- Reminder Item 1 -->
+                    <div class="reminder-item gradient-blue">
+                        <div class="reminder-icon"><i class="fa-solid fa-pills"></i></div>
+                        <div class="reminder-info">
+                            <h3>Vitamin C</h3>
+                            <p>1 Pill • 08:00 AM</p>
+                        </div>
+                        <button class="check-btn"><i class="fa-solid fa-check"></i></button>
                     </div>
-                    <div class="input-group">
-                        <label for="med-time">Time</label>
-                        <input type="time" id="med-time" required>
+                    
+                    <!-- Reminder Item 2 -->
+                    <div class="reminder-item gradient-purple">
+                        <div class="reminder-icon"><i class="fa-solid fa-capsules"></i></div>
+                        <div class="reminder-info">
+                            <h3>Aspirin</h3>
+                            <p>1 Pill • 02:00 PM</p>
+                        </div>
+                        <button class="check-btn"><i class="fa-solid fa-check"></i></button>
                     </div>
-                </div>
-                <button type="button" class="btn-primary">Add Reminder</button>
-            </form>
-        </section>
-
-        <section class="reminder-list">
-            <h2>Upcoming Reminders</h2>
-            <div class="reminder-items">
-                <!-- Sample Item 1 -->
-                <div class="reminder-item">
-                    <div class="reminder-info">
-                        <h3>Vitamin C</h3>
-                        <p>1 Pill, After Breakfast</p>
-                    </div>
-                    <div class="reminder-time">
-                        <span class="time">08:00 AM</span>
-                        <span class="date">Today</span>
-                    </div>
-                    <div class="reminder-status pending"></div>
-                </div>
-
-                <!-- Sample Item 2 -->
-                <div class="reminder-item">
-                    <div class="reminder-info">
-                        <h3>Lisinopril</h3>
-                        <p>10mg, With Water</p>
-                    </div>
-                    <div class="reminder-time">
-                        <span class="time">01:30 PM</span>
-                        <span class="date">Today</span>
-                    </div>
-                    <div class="reminder-status pending"></div>
-                </div>
-
-                <!-- Sample Item 3 -->
-                <div class="reminder-item taken">
-                    <div class="reminder-info">
-                        <h3>Aspirin</h3>
-                        <p>81mg</p>
-                    </div>
-                    <div class="reminder-time">
-                        <span class="time">07:00 AM</span>
-                        <span class="date">Yesterday</span>
-                    </div>
-                    <div class="reminder-status completed">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
+                    
+                    <!-- Reminder Item 3 -->
+                    <div class="reminder-item gradient-peach">
+                        <div class="reminder-icon"><i class="fa-solid fa-prescription-bottle"></i></div>
+                        <div class="reminder-info">
+                            <h3>Melatonin</h3>
+                            <p>5mg • 09:30 PM</p>
+                        </div>
+                        <button class="check-btn"><i class="fa-solid fa-check"></i></button>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+
+        <!-- ==================== ADD SCREEN ==================== -->
+        <div id="screen-add" class="screen">
+            <div class="header text-center">
+                <h2>New Reminder</h2>
+            </div>
+            
+            <div class="screen-content">
+                <form id="add-form" onsubmit="event.preventDefault();">
+                    <div class="input-group">
+                        <label>Medicine Name</label>
+                        <input type="text" placeholder="e.g. Ibuprofen" required>
+                    </div>
+                    
+                    <div class="input-group row">
+                        <div class="half">
+                            <label>Dosage</label>
+                            <input type="text" placeholder="e.g. 1 Pill" required>
+                        </div>
+                        <div class="half">
+                            <label>Time</label>
+                            <input type="time" required>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Card Color</label>
+                        <div class="color-picker">
+                            <div class="color-opt gradient-blue active"></div>
+                            <div class="color-opt gradient-purple"></div>
+                            <div class="color-opt gradient-peach"></div>
+                            <div class="color-opt gradient-green"></div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn-primary" type="submit">Save Reminder</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- ==================== SETTINGS SCREEN ==================== -->
+        <div id="screen-settings" class="screen">
+            <div class="header text-center">
+                <h2>Settings</h2>
+            </div>
+            
+            <div class="screen-content">
+                <div class="settings-list">
+                    <div class="settings-item">
+                        <i class="fa-solid fa-bell"></i> 
+                        <span>Notifications</span>
+                        <i class="fa-solid fa-chevron-right arrow"></i>
+                    </div>
+                    <div class="settings-item">
+                        <i class="fa-solid fa-user"></i> 
+                        <span>Profile</span>
+                        <i class="fa-solid fa-chevron-right arrow"></i>
+                    </div>
+                    <div class="settings-item">
+                        <i class="fa-solid fa-shield-halved"></i> 
+                        <span>Privacy</span>
+                        <i class="fa-solid fa-chevron-right arrow"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== BOTTOM NAVIGATION ==================== -->
+        <nav class="bottom-nav">
+            <div class="nav-item active" data-target="screen-home">
+                <i class="fa-solid fa-house"></i>
+                <span>Home</span>
+            </div>
+            
+            <div class="nav-item center-fab" data-target="screen-add">
+                <div class="fab">
+                    <i class="fa-solid fa-plus"></i>
+                </div>
+            </div>
+            
+            <div class="nav-item" data-target="screen-settings">
+                <i class="fa-solid fa-gear"></i>
+                <span>Settings</span>
+            </div>
+        </nav>
+        
     </div>
+    <script src="script.js"></script>
 </body>
-
 </html>
