@@ -4,31 +4,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aura - Premium Medicine Reminder</title>
-    <!-- Google Fonts: Outfit for a sleek, modern look -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet">
+    <title>Aura - Neo Brutalism</title>
+    <!-- Google Fonts: Outfit for a bold modern look -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&display=swap" rel="stylesheet">
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-    <!-- Abstract Background for Glassmorphism Effect -->
-    <div class="bg-shape shape-1"></div>
-    <div class="bg-shape shape-2"></div>
-    <div class="bg-shape shape-3"></div>
-
     <div class="app-container">
-        <!-- Glassmorphism Navigation -->
-        <nav class="glass-nav">
+        <!-- Brutalist Navigation -->
+        <nav class="brutal-nav">
             <div class="logo">
-                <i class="fa-solid fa-droplet"></i> Aura
+                <i class="fa-solid fa-droplet"></i> AURA
             </div>
             <ul class="nav-links">
-                <li><a href="#" class="active">Home</a></li>
-                <li><a href="#">Schedule</a></li>
-                <li><a href="#">Insights</a></li>
+                <li><a href="#" class="active">HOME</a></li>
+                <li><a href="#">SCHEDULE</a></li>
+                <li><a href="#">INSIGHTS</a></li>
             </ul>
             <button class="icon-btn"><i class="fa-regular fa-bell"></i></button>
         </nav>
@@ -36,12 +30,12 @@
         <!-- Hero Section -->
         <section class="hero-section">
             <div class="hero-content">
-                <h1 class="hero-title">Your Health,<br><span class="text-gradient">Our Concern.</span></h1>
-                <p class="hero-description">Never miss a dose again. Aura intelligently tracks your medication schedule
-                    in a stunning, distraction-free environment designed for peace of mind.</p>
+                <div class="hero-badge">STAY HEALTHY</div>
+                <h1 class="hero-title">YOUR HEALTH,<br>OUR CONCERN.</h1>
+                <p class="hero-description">Never miss a dose again. Aura tracks your medication schedule in a bold, distraction-free environment.</p>
                 <div class="hero-actions">
-                    <button class="btn-glow"><i class="fa-solid fa-plus"></i> Add Reminder</button>
-                    <button class="btn-glass"><i class="fa-solid fa-play"></i> Watch Demo</button>
+                    <button class="btn-primary"><i class="fa-solid fa-plus"></i> ADD REMINDER</button>
+                    <button class="btn-secondary"><i class="fa-solid fa-play"></i> WATCH DEMO</button>
                 </div>
             </div>
         </section>
@@ -49,67 +43,64 @@
         <!-- Reminders Grid Section -->
         <section class="reminders-section">
             <div class="section-header">
-                <h2>Upcoming Reminders</h2>
-                <span class="glass-badge">Today, Oct 24</span>
+                <h2>UPCOMING REMINDERS</h2>
+                <span class="brutal-badge">TODAY, OCT 24</span>
             </div>
-
+            
             <div class="cards-grid">
-
+                
                 <!-- Reminder Card 1 -->
-                <div class="glass-card">
-                    <div class="card-glow" style="background: rgba(99, 104, 255, 0.4);"></div>
+                <div class="brutal-card card-yellow">
                     <div class="card-top">
                         <div class="time-box">
                             <i class="fa-regular fa-clock"></i> 08:00 AM
                         </div>
                         <div class="menu-dots"><i class="fa-solid fa-ellipsis"></i></div>
                     </div>
-                    <div class="card-icon" style="color: #ff6b81; background: rgba(255, 107, 129, 0.1);">
+                    <div class="card-icon">
                         <i class="fa-solid fa-capsules"></i>
                     </div>
                     <h3 class="med-name">Amoxicillin</h3>
                     <p class="med-detail">500mg • After Breakfast</p>
-                    <button class="action-btn">Mark as Taken</button>
+                    <button class="action-btn">MARK AS TAKEN</button>
                 </div>
 
                 <!-- Reminder Card 2 (Active/Current) -->
-                <div class="glass-card active-card">
-                    <div class="card-glow" style="background: rgba(54, 162, 235, 0.4);"></div>
+                <div class="brutal-card card-cyan">
                     <div class="card-top">
-                        <div class="time-box highlight">
+                        <div class="time-box">
                             <i class="fa-regular fa-clock"></i> 02:00 PM
                         </div>
                         <div class="menu-dots"><i class="fa-solid fa-ellipsis"></i></div>
                     </div>
-                    <div class="card-icon" style="color: #4facfe; background: rgba(79, 172, 254, 0.1);">
+                    <div class="card-icon">
                         <i class="fa-solid fa-prescription-bottle-medical"></i>
                     </div>
                     <h3 class="med-name">Ibuprofen</h3>
                     <p class="med-detail">200mg • With Water</p>
-                    <button class="action-btn highlight-btn">Take Now</button>
+                    <button class="action-btn">TAKE NOW</button>
                 </div>
 
                 <!-- Reminder Card 3 -->
-                <div class="glass-card">
-                    <div class="card-glow" style="background: rgba(153, 102, 255, 0.4);"></div>
+                <div class="brutal-card card-pink">
                     <div class="card-top">
                         <div class="time-box">
                             <i class="fa-regular fa-clock"></i> 09:30 PM
                         </div>
                         <div class="menu-dots"><i class="fa-solid fa-ellipsis"></i></div>
                     </div>
-                    <div class="card-icon" style="color: #a18cd1; background: rgba(161, 140, 209, 0.1);">
+                    <div class="card-icon">
                         <i class="fa-solid fa-moon"></i>
                     </div>
                     <h3 class="med-name">Dolo</h3>
                     <p class="med-detail">5mg • Before Bed</p>
-                    <button class="action-btn">Mark as Taken</button>
+                    <button class="action-btn">MARK AS TAKEN</button>
                 </div>
 
             </div>
         </section>
     </div>
-
+    
     <script src="script.js"></script>
 </body>
 
