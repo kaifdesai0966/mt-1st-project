@@ -3,216 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MedDash - Professional Medicine Dashboard</title>
-    <!-- Modern Inter Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- FontAwesome for professional icons -->
+    <title>Aura - Premium Medicine Reminder</title>
+    <!-- Google Fonts: Outfit for a sleek, modern look -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="dashboard-container">
-        
-        <!-- Sidebar Navigation -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <div class="logo-icon"><i class="fa-solid fa-notes-medical"></i></div>
-                <h2>MedDash</h2>
+    <!-- Abstract Background for Glassmorphism Effect -->
+    <div class="bg-shape shape-1"></div>
+    <div class="bg-shape shape-2"></div>
+    <div class="bg-shape shape-3"></div>
+
+    <div class="app-container">
+        <!-- Glassmorphism Navigation -->
+        <nav class="glass-nav">
+            <div class="logo">
+                <i class="fa-solid fa-droplet"></i> Aura
             </div>
-            
-            <ul class="sidebar-menu">
-                <li class="active">
-                    <a href="#"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
-                </li>
-                <li>
-                    <a href="#"><i class="fa-solid fa-capsules"></i> Reminders</a>
-                </li>
-                <li>
-                    <a href="#"><i class="fa-solid fa-clock-rotate-left"></i> History</a>
-                </li>
-                <li>
-                    <a href="#"><i class="fa-solid fa-gear"></i> Settings</a>
-                </li>
+            <ul class="nav-links">
+                <li><a href="#" class="active">Home</a></li>
+                <li><a href="#">Schedule</a></li>
+                <li><a href="#">Insights</a></li>
             </ul>
-        </aside>
+            <button class="icon-btn"><i class="fa-regular fa-bell"></i></button>
+        </nav>
 
-        <!-- Main Dashboard Content -->
-        <main class="main-content">
-            
-            <!-- Top App Bar -->
-            <header class="topbar">
-                <div class="search-bar">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" placeholder="Search medicines...">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1 class="hero-title">Your Health,<br><span class="text-gradient">Beautifully Timed.</span></h1>
+                <p class="hero-description">Never miss a dose again. Aura intelligently tracks your medication schedule in a stunning, distraction-free environment designed for peace of mind.</p>
+                <div class="hero-actions">
+                    <button class="btn-glow"><i class="fa-solid fa-plus"></i> Add Reminder</button>
+                    <button class="btn-glass"><i class="fa-solid fa-play"></i> Watch Demo</button>
                 </div>
-                
-                <div class="user-profile">
-                    <button class="icon-btn"><i class="fa-regular fa-bell"></i><span class="notification-dot"></span></button>
-                    <div class="profile-info">
-                        <div class="avatar"><i class="fa-solid fa-user-doctor"></i></div>
-                        <span class="username">Dr. Sarah</span>
-                    </div>
-                </div>
-            </header>
-
-            <!-- Dashboard Data Area -->
-            <div class="content-wrapper">
-                <div class="page-header">
-                    <h1 class="page-title">Dashboard Overview</h1>
-                    <p class="page-subtitle">Welcome back! Here's your medicine status.</p>
-                </div>
-                
-                <!-- Top Statistics Cards -->
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon blue"><i class="fa-solid fa-pills"></i></div>
-                        <div class="stat-info">
-                            <h3>Total Medicines</h3>
-                            <p class="stat-value">12 Active</p>
-                        </div>
-                    </div>
-                    
-                    <div class="stat-card">
-                        <div class="stat-icon green"><i class="fa-solid fa-check-double"></i></div>
-                        <div class="stat-info">
-                            <h3>Today's Reminders</h3>
-                            <p class="stat-value">5 Tasks</p>
-                        </div>
-                    </div>
-                    
-                    <div class="stat-card">
-                        <div class="stat-icon orange"><i class="fa-solid fa-calendar-day"></i></div>
-                        <div class="stat-info">
-                            <h3>Upcoming Reminders</h3>
-                            <p class="stat-value">3 Pending</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Main Tables and Lists Area -->
-                <div class="tables-grid">
-                    
-                    <!-- Today's Reminders Table -->
-                    <div class="card table-card">
-                        <div class="card-header">
-                            <h2>Today's Reminders</h2>
-                            <button class="btn-sm"><i class="fa-solid fa-plus"></i> Add Reminder</button>
-                        </div>
-                        
-                        <div class="table-responsive">
-                            <table class="data-table">
-                                <thead>
-                                    <tr>
-                                        <th>Medicine Name</th>
-                                        <th>Dosage</th>
-                                        <th>Time</th>
-                                        <th>Status</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <div class="med-name">
-                                                <div class="med-icon"><i class="fa-solid fa-capsules"></i></div>
-                                                <div class="med-text">
-                                                    <span class="title">Amoxicillin</span>
-                                                    <span class="subtitle">Antibiotic</span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>500mg</td>
-                                        <td>08:00 AM</td>
-                                        <td><span class="status-badge success">Taken</span></td>
-                                        <td>
-                                            <button class="action-btn"><i class="fa-solid fa-ellipsis-vertical"></i></button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="med-name">
-                                                <div class="med-icon"><i class="fa-solid fa-prescription-bottle-medical"></i></div>
-                                                <div class="med-text">
-                                                    <span class="title">Ibuprofen</span>
-                                                    <span class="subtitle">Painkiller</span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>200mg</td>
-                                        <td>02:00 PM</td>
-                                        <td><span class="status-badge pending">Pending</span></td>
-                                        <td>
-                                            <button class="action-btn"><i class="fa-solid fa-ellipsis-vertical"></i></button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="med-name">
-                                                <div class="med-icon"><i class="fa-solid fa-tablets"></i></div>
-                                                <div class="med-text">
-                                                    <span class="title">Vitamin D3</span>
-                                                    <span class="subtitle">Supplement</span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>1 Pill</td>
-                                        <td>08:00 PM</td>
-                                        <td><span class="status-badge pending">Pending</span></td>
-                                        <td>
-                                            <button class="action-btn"><i class="fa-solid fa-ellipsis-vertical"></i></button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- Upcoming Reminders List -->
-                    <div class="card upcoming-card">
-                        <div class="card-header">
-                            <h2>Upcoming Events</h2>
-                        </div>
-                        
-                        <div class="upcoming-list">
-                            <div class="upcoming-item">
-                                <div class="date-box">
-                                    <span class="day">Mon</span>
-                                    <span class="date">20</span>
-                                </div>
-                                <div class="upcoming-info">
-                                    <h4>Lisinopril Renewal</h4>
-                                    <p>Refill required at CVS Pharmacy</p>
-                                </div>
-                            </div>
-                            
-                            <div class="upcoming-item">
-                                <div class="date-box blue">
-                                    <span class="day">Wed</span>
-                                    <span class="date">22</span>
-                                </div>
-                                <div class="upcoming-info">
-                                    <h4>Doctor Appointment</h4>
-                                    <p>Dr. Smith - Routine checkup</p>
-                                </div>
-                            </div>
-                            
-                            <div class="upcoming-item">
-                                <div class="date-box green">
-                                    <span class="day">Fri</span>
-                                    <span class="date">24</span>
-                                </div>
-                                <div class="upcoming-info">
-                                    <h4>Start new supplement</h4>
-                                    <p>Iron tablets, once daily</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
             </div>
-        </main>
+        </section>
+
+        <!-- Reminders Grid Section -->
+        <section class="reminders-section">
+            <div class="section-header">
+                <h2>Upcoming Reminders</h2>
+                <span class="glass-badge">Today, Oct 24</span>
+            </div>
+            
+            <div class="cards-grid">
+                
+                <!-- Reminder Card 1 -->
+                <div class="glass-card">
+                    <div class="card-glow" style="background: rgba(255, 99, 132, 0.4);"></div>
+                    <div class="card-top">
+                        <div class="time-box">
+                            <i class="fa-regular fa-clock"></i> 08:00 AM
+                        </div>
+                        <div class="menu-dots"><i class="fa-solid fa-ellipsis"></i></div>
+                    </div>
+                    <div class="card-icon" style="color: #ff6b81; background: rgba(255, 107, 129, 0.1);">
+                        <i class="fa-solid fa-capsules"></i>
+                    </div>
+                    <h3 class="med-name">Amoxicillin</h3>
+                    <p class="med-detail">500mg • After Breakfast</p>
+                    <button class="action-btn">Mark as Taken</button>
+                </div>
+
+                <!-- Reminder Card 2 (Active/Current) -->
+                <div class="glass-card active-card">
+                    <div class="card-glow" style="background: rgba(54, 162, 235, 0.4);"></div>
+                    <div class="card-top">
+                        <div class="time-box highlight">
+                            <i class="fa-regular fa-clock"></i> 02:00 PM
+                        </div>
+                        <div class="menu-dots"><i class="fa-solid fa-ellipsis"></i></div>
+                    </div>
+                    <div class="card-icon" style="color: #4facfe; background: rgba(79, 172, 254, 0.1);">
+                        <i class="fa-solid fa-prescription-bottle-medical"></i>
+                    </div>
+                    <h3 class="med-name">Ibuprofen</h3>
+                    <p class="med-detail">200mg • With Water</p>
+                    <button class="action-btn highlight-btn">Take Now</button>
+                </div>
+
+                <!-- Reminder Card 3 -->
+                <div class="glass-card">
+                    <div class="card-glow" style="background: rgba(153, 102, 255, 0.4);"></div>
+                    <div class="card-top">
+                        <div class="time-box">
+                            <i class="fa-regular fa-clock"></i> 09:30 PM
+                        </div>
+                        <div class="menu-dots"><i class="fa-solid fa-ellipsis"></i></div>
+                    </div>
+                    <div class="card-icon" style="color: #a18cd1; background: rgba(161, 140, 209, 0.1);">
+                        <i class="fa-solid fa-moon"></i>
+                    </div>
+                    <h3 class="med-name">Melatonin</h3>
+                    <p class="med-detail">5mg • Before Bed</p>
+                    <button class="action-btn">Mark as Taken</button>
+                </div>
+
+            </div>
+        </section>
     </div>
+    
     <script src="script.js"></script>
 </body>
 </html>
