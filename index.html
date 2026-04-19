@@ -3,144 +3,215 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MedApp Mobile</title>
-    <!-- Inter Font for minimal app look -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <!-- FontAwesome for Icons -->
+    <title>MedDash - Professional Medicine Dashboard</title>
+    <!-- Modern Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for professional icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="mobile-container">
+    <div class="dashboard-container">
         
-        <!-- ==================== HOME SCREEN ==================== -->
-        <div id="screen-home" class="screen active">
-            <div class="header">
-                <h1>Hi, User</h1>
-                <p>Your reminders for today</p>
-                <div class="date-badge">18 Apr</div>
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-icon"><i class="fa-solid fa-notes-medical"></i></div>
+                <h2>MedDash</h2>
             </div>
             
-            <div class="screen-content">
-                <div class="reminder-list">
-                    <!-- Reminder Item 1 -->
-                    <div class="reminder-item gradient-blue">
-                        <div class="reminder-icon"><i class="fa-solid fa-pills"></i></div>
-                        <div class="reminder-info">
-                            <h3>Vitamin C</h3>
-                            <p>1 Pill • 08:00 AM</p>
-                        </div>
-                        <button class="check-btn"><i class="fa-solid fa-check"></i></button>
-                    </div>
-                    
-                    <!-- Reminder Item 2 -->
-                    <div class="reminder-item gradient-purple">
-                        <div class="reminder-icon"><i class="fa-solid fa-capsules"></i></div>
-                        <div class="reminder-info">
-                            <h3>Aspirin</h3>
-                            <p>1 Pill • 02:00 PM</p>
-                        </div>
-                        <button class="check-btn"><i class="fa-solid fa-check"></i></button>
-                    </div>
-                    
-                    <!-- Reminder Item 3 -->
-                    <div class="reminder-item gradient-peach">
-                        <div class="reminder-icon"><i class="fa-solid fa-prescription-bottle"></i></div>
-                        <div class="reminder-info">
-                            <h3>Melatonin</h3>
-                            <p>5mg • 09:30 PM</p>
-                        </div>
-                        <button class="check-btn"><i class="fa-solid fa-check"></i></button>
+            <ul class="sidebar-menu">
+                <li class="active">
+                    <a href="#"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+                </li>
+                <li>
+                    <a href="#"><i class="fa-solid fa-capsules"></i> Reminders</a>
+                </li>
+                <li>
+                    <a href="#"><i class="fa-solid fa-clock-rotate-left"></i> History</a>
+                </li>
+                <li>
+                    <a href="#"><i class="fa-solid fa-gear"></i> Settings</a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Dashboard Content -->
+        <main class="main-content">
+            
+            <!-- Top App Bar -->
+            <header class="topbar">
+                <div class="search-bar">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" placeholder="Search medicines...">
+                </div>
+                
+                <div class="user-profile">
+                    <button class="icon-btn"><i class="fa-regular fa-bell"></i><span class="notification-dot"></span></button>
+                    <div class="profile-info">
+                        <div class="avatar"><i class="fa-solid fa-user-doctor"></i></div>
+                        <span class="username">Dr. Sarah</span>
                     </div>
                 </div>
-            </div>
-        </div>
+            </header>
 
-        <!-- ==================== ADD SCREEN ==================== -->
-        <div id="screen-add" class="screen">
-            <div class="header text-center">
-                <h2>New Reminder</h2>
-            </div>
-            
-            <div class="screen-content">
-                <form id="add-form" onsubmit="event.preventDefault();">
-                    <div class="input-group">
-                        <label>Medicine Name</label>
-                        <input type="text" placeholder="e.g. Ibuprofen" required>
-                    </div>
-                    
-                    <div class="input-group row">
-                        <div class="half">
-                            <label>Dosage</label>
-                            <input type="text" placeholder="e.g. 1 Pill" required>
-                        </div>
-                        <div class="half">
-                            <label>Time</label>
-                            <input type="time" required>
+            <!-- Dashboard Data Area -->
+            <div class="content-wrapper">
+                <div class="page-header">
+                    <h1 class="page-title">Dashboard Overview</h1>
+                    <p class="page-subtitle">Welcome back! Here's your medicine status.</p>
+                </div>
+                
+                <!-- Top Statistics Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon blue"><i class="fa-solid fa-pills"></i></div>
+                        <div class="stat-info">
+                            <h3>Total Medicines</h3>
+                            <p class="stat-value">12 Active</p>
                         </div>
                     </div>
                     
-                    <div class="input-group">
-                        <label>Card Color</label>
-                        <div class="color-picker">
-                            <div class="color-opt gradient-blue active"></div>
-                            <div class="color-opt gradient-purple"></div>
-                            <div class="color-opt gradient-peach"></div>
-                            <div class="color-opt gradient-green"></div>
+                    <div class="stat-card">
+                        <div class="stat-icon green"><i class="fa-solid fa-check-double"></i></div>
+                        <div class="stat-info">
+                            <h3>Today's Reminders</h3>
+                            <p class="stat-value">5 Tasks</p>
                         </div>
                     </div>
                     
-                    <button class="btn-primary" type="submit">Save Reminder</button>
-                </form>
-            </div>
-        </div>
-
-        <!-- ==================== SETTINGS SCREEN ==================== -->
-        <div id="screen-settings" class="screen">
-            <div class="header text-center">
-                <h2>Settings</h2>
-            </div>
-            
-            <div class="screen-content">
-                <div class="settings-list">
-                    <div class="settings-item">
-                        <i class="fa-solid fa-bell"></i> 
-                        <span>Notifications</span>
-                        <i class="fa-solid fa-chevron-right arrow"></i>
-                    </div>
-                    <div class="settings-item">
-                        <i class="fa-solid fa-user"></i> 
-                        <span>Profile</span>
-                        <i class="fa-solid fa-chevron-right arrow"></i>
-                    </div>
-                    <div class="settings-item">
-                        <i class="fa-solid fa-shield-halved"></i> 
-                        <span>Privacy</span>
-                        <i class="fa-solid fa-chevron-right arrow"></i>
+                    <div class="stat-card">
+                        <div class="stat-icon orange"><i class="fa-solid fa-calendar-day"></i></div>
+                        <div class="stat-info">
+                            <h3>Upcoming Reminders</h3>
+                            <p class="stat-value">3 Pending</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <!-- ==================== BOTTOM NAVIGATION ==================== -->
-        <nav class="bottom-nav">
-            <div class="nav-item active" data-target="screen-home">
-                <i class="fa-solid fa-house"></i>
-                <span>Home</span>
-            </div>
-            
-            <div class="nav-item center-fab" data-target="screen-add">
-                <div class="fab">
-                    <i class="fa-solid fa-plus"></i>
+                <!-- Main Tables and Lists Area -->
+                <div class="tables-grid">
+                    
+                    <!-- Today's Reminders Table -->
+                    <div class="card table-card">
+                        <div class="card-header">
+                            <h2>Today's Reminders</h2>
+                            <button class="btn-sm"><i class="fa-solid fa-plus"></i> Add Reminder</button>
+                        </div>
+                        
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Medicine Name</th>
+                                        <th>Dosage</th>
+                                        <th>Time</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <div class="med-name">
+                                                <div class="med-icon"><i class="fa-solid fa-capsules"></i></div>
+                                                <div class="med-text">
+                                                    <span class="title">Amoxicillin</span>
+                                                    <span class="subtitle">Antibiotic</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>500mg</td>
+                                        <td>08:00 AM</td>
+                                        <td><span class="status-badge success">Taken</span></td>
+                                        <td>
+                                            <button class="action-btn"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="med-name">
+                                                <div class="med-icon"><i class="fa-solid fa-prescription-bottle-medical"></i></div>
+                                                <div class="med-text">
+                                                    <span class="title">Ibuprofen</span>
+                                                    <span class="subtitle">Painkiller</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>200mg</td>
+                                        <td>02:00 PM</td>
+                                        <td><span class="status-badge pending">Pending</span></td>
+                                        <td>
+                                            <button class="action-btn"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="med-name">
+                                                <div class="med-icon"><i class="fa-solid fa-tablets"></i></div>
+                                                <div class="med-text">
+                                                    <span class="title">Vitamin D3</span>
+                                                    <span class="subtitle">Supplement</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>1 Pill</td>
+                                        <td>08:00 PM</td>
+                                        <td><span class="status-badge pending">Pending</span></td>
+                                        <td>
+                                            <button class="action-btn"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Upcoming Reminders List -->
+                    <div class="card upcoming-card">
+                        <div class="card-header">
+                            <h2>Upcoming Events</h2>
+                        </div>
+                        
+                        <div class="upcoming-list">
+                            <div class="upcoming-item">
+                                <div class="date-box">
+                                    <span class="day">Mon</span>
+                                    <span class="date">20</span>
+                                </div>
+                                <div class="upcoming-info">
+                                    <h4>Lisinopril Renewal</h4>
+                                    <p>Refill required at CVS Pharmacy</p>
+                                </div>
+                            </div>
+                            
+                            <div class="upcoming-item">
+                                <div class="date-box blue">
+                                    <span class="day">Wed</span>
+                                    <span class="date">22</span>
+                                </div>
+                                <div class="upcoming-info">
+                                    <h4>Doctor Appointment</h4>
+                                    <p>Dr. Smith - Routine checkup</p>
+                                </div>
+                            </div>
+                            
+                            <div class="upcoming-item">
+                                <div class="date-box green">
+                                    <span class="day">Fri</span>
+                                    <span class="date">24</span>
+                                </div>
+                                <div class="upcoming-info">
+                                    <h4>Start new supplement</h4>
+                                    <p>Iron tablets, once daily</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+                
             </div>
-            
-            <div class="nav-item" data-target="screen-settings">
-                <i class="fa-solid fa-gear"></i>
-                <span>Settings</span>
-            </div>
-        </nav>
-        
+        </main>
     </div>
     <script src="script.js"></script>
 </body>
