@@ -481,6 +481,179 @@ body {
     padding: 2rem;
 }
 
+/* ==================== WEEKLY SCHEDULE ==================== */
+.weekly-schedule {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+}
+
+.day-pill {
+    padding: 0.8rem 1.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.day-pill .day-name {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.day-pill .day-date {
+    display: block;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.day-pill:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.day-pill.active {
+    background: var(--color-cyan);
+    color: #0b1120;
+    border-color: var(--color-cyan);
+    box-shadow: 0 4px 15px rgba(34, 211, 238, 0.3);
+}
+
+.day-pill.active .day-name {
+    color: #0b1120;
+}
+
+/* ==================== CARD STATES ==================== */
+.card-taken {
+    opacity: 0.6;
+    background: rgba(74, 222, 128, 0.05);
+}
+
+.card-taken .action-btn {
+    background: var(--color-green);
+    color: #0b1120;
+    pointer-events: none;
+    border: none;
+}
+
+.card-missed {
+    border-color: rgba(244, 114, 182, 0.5);
+    box-shadow: 0 0 20px rgba(244, 114, 182, 0.2);
+}
+
+.card-missed .action-btn {
+    background: transparent;
+    border: 1px solid var(--color-pink);
+    color: var(--color-pink);
+}
+
+.card-missed .action-btn:hover {
+    background: rgba(244, 114, 182, 0.1);
+}
+
+.missed-badge {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background: var(--color-pink);
+    color: #fff;
+    font-size: 0.8rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: 12px;
+    font-weight: 600;
+    box-shadow: 0 4px 10px rgba(244, 114, 182, 0.4);
+}
+
+/* ==================== MODAL ==================== */
+.glass-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(11, 17, 32, 0.8);
+    backdrop-filter: blur(8px);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.glass-modal.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.modal-content {
+    width: 100%;
+    max-width: 500px;
+    padding: 2.5rem;
+    transform: translateY(0);
+    transition: transform 0.3s ease;
+}
+
+.glass-modal.hidden .modal-content {
+    transform: translateY(20px);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.day-checkboxes {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.day-label {
+    cursor: pointer;
+}
+
+.day-label input {
+    display: none;
+}
+
+.day-label span {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.day-label input:checked+span {
+    background: var(--color-cyan);
+    color: #0b1120;
+    border-color: var(--color-cyan);
+}
+
+.w-100 {
+    width: 100%;
+}
+
 /* ==================== RESPONSIVE ==================== */
 @media (max-width: 900px) {
     .hero-title {
