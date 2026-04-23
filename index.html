@@ -41,11 +41,13 @@
                 <p class="hero-description">Never miss a dose again. Aura tracks your medication schedule in a serene,
                     distraction-free environment.</p>
                 <div class="hero-actions">
-                    <button id="add-reminder-btn" class="btn-primary"><i class="fa-solid fa-plus"></i> Add Reminder</button>
+                    <button id="add-reminder-btn" class="btn-primary"><i class="fa-solid fa-plus"></i> Set
+                        Reminder</button>
                     <button class="btn-secondary"><i class="fa-solid fa-play"></i> Watch Demo</button>
                 </div>
             </div>
         </section>
+
 
         <!-- Reminders Grid Section -->
         <section id="schedule" class="reminders-section">
@@ -61,6 +63,48 @@
 
             <div class="cards-grid" id="reminders-grid">
                 <!-- Dynamic content will go here -->
+            </div>
+        </section>
+
+        <!-- Weekly Schedule Table Section -->
+        <section id="weekly-schedule-table" class="reminders-section">
+            <div class="section-header">
+                <h2>Weekly Schedule</h2>
+                <div class="status-legend">
+                    <span class="legend-item"><i class="fa-solid fa-check" style="color: var(--color-green)"></i>
+                        Taken</span>
+                    <span class="legend-item"><i class="fa-regular fa-clock" style="color: var(--color-yellow)"></i>
+                        Pending</span>
+                    <span class="legend-item"><i class="fa-solid fa-xmark" style="color: var(--color-pink)"></i>
+                        Missed</span>
+                </div>
+            </div>
+
+            <div class="glass-table-container">
+                <table class="glass-table" id="weekly-table">
+                    <thead>
+                        <tr>
+                            <th>Medicine Name</th>
+                            <th>Time</th>
+                            <th>Mon</th>
+                            <th>Tue</th>
+                            <th>Wed</th>
+                            <th>Thu</th>
+                            <th>Fri</th>
+                            <th>Sat</th>
+                            <th>Sun</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="weekly-table-body">
+                        <!-- Dynamic rows will go here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Missed Dose Alerts -->
+            <div id="missed-alerts-container" class="missed-alerts-container">
+                <!-- Alerts will appear here -->
             </div>
         </section>
 
@@ -101,7 +145,8 @@
                 </div>
                 <div class="form-group">
                     <label for="modal-med-dosage">Dosage & Instructions</label>
-                    <input type="text" id="modal-med-dosage" class="glass-input" required placeholder="e.g. 500mg • After Breakfast">
+                    <input type="text" id="modal-med-dosage" class="glass-input" required
+                        placeholder="e.g. 500mg • After Breakfast">
                 </div>
                 <div class="form-group">
                     <label for="modal-med-time">Time</label>

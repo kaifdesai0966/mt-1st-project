@@ -25,6 +25,377 @@ actionBtns.forEach(btn => {
     });
 });
 
+// ==================== WEEKLY SCHEDULE LOGIC ====================
+const STORAGE_KEY = 'aura_medicines';
+
+// Track already notified reminders in this session so we don't spam
+const notifiedReminders = new Set();
+
+function getMedicines() {
+    let meds = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    if (!meds || meds.length === 0) {
+        // Initialize with default medicines
+        meds = [
+            { id: generateId(), name: 'Medicine 1', dosage: 'After Breakfast', time: '09:00', days: [0, 1, 2, 3, 4, 5, 6], statusLog: {}, icon: 'fa-pills', color: 'cyan' },
+            { id: generateId(), name: 'Medicine 2', dosage: 'With Water', time: '14:00', days: [0, 1, 2, 3, 4, 5, 6], statusLog: {}, icon: 'fa-prescription-bottle-medical', color: 'yellow' },
+            { id: generateId(), name: 'Medicine 3', dosage: 'Before Bed', time: '22:30', days: [0, 1, 2, 3, 4, 5, 6], statusLog: {}, icon: 'fa-moon', color: 'pink' }
+        ];
+        saveMedicines(meds);
+    }
+    return meds;
+}
+
+function saveMedicines(medicines) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(medicines));
+}
+
+function generateId() {
+    return '_' + Math.random().toString(36).substr(2, 9);
+}
+
+function getDayName(dayIndex) {
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    return days[dayIndex];
+}
+
+const addReminderBtn = document.getElementById('add-reminder-btn');
+const reminderModal = document.getElementById('reminder-modal');
+const closeModalBtn = document.getElementById('close-modal-btn');
+const reminderForm = document.getElementById('reminder-form');
+const weeklyTableBody = document.getElementById('weekly-table-body');
+const missedAlertsContainer = document.getElementById('missed-alerts-container');
+const remindersGrid = document.getElementById('reminders-grid');
+
+if (addReminderBtn && reminderModal && closeModalBtn) {
+    addReminderBtn.addEventListener('click', () => {
+        reminderForm.reset();
+        document.getElementById('reminder-id').value = '';
+        reminderModal.classList.remove('hidden');
+    });
+
+    closeModalBtn.addEventListener('click', () => {
+        reminderModal.classList.add('hidden');
+    });
+
+    reminderModal.addEventListener('click', (e) => {
+        if (e.target === reminderModal) reminderModal.classList.add('hidden');
+    });
+}
+
+if (reminderForm) {
+    reminderForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const idInput = document.getElementById('reminder-id').value;
+        const name = document.getElementById('modal-med-name').value;
+        const dosage = document.getElementById('modal-med-dosage').value;
+        const time = document.getElementById('modal-med-time').value;
+        
+        const daysNodes = document.querySelectorAll('input[name="days"]:checked');
+        const selectedDays = Array.from(daysNodes).map(node => parseInt(node.value));
+        
+        if (selectedDays.length === 0) {
+            alert('Please select at least one day.');
+            return;
+        }
+
+        const medicines = getMedicines();
+        
+        if (idInput) {
+            const index = medicines.findIndex(m => m.id === idInput);
+            if (index !== -1) {
+                medicines[index] = { ...medicines[index], name, dosage, time, days: selectedDays };
+            }
+        } else {
+            // Assign random icon and color for new medicines for demo purposes
+            const icons = ['fa-pills', 'fa-prescription-bottle-medical', 'fa-moon', 'fa-capsules', 'fa-syringe'];
+            const colors = ['cyan', 'yellow', 'pink', 'green', 'purple'];
+            
+            medicines.push({
+                id: generateId(),
+                name,
+                dosage,
+                time,
+                days: selectedDays,
+                statusLog: {},
+                icon: icons[Math.floor(Math.random() * icons.length)],
+                color: colors[Math.floor(Math.random() * colors.length)]
+            });
+        }
+        
+        saveMedicines(medicines);
+        reminderModal.classList.add('hidden');
+        renderUI();
+    });
+}
+
+function getDateForDayThisWeek(targetDayIndex) {
+    const today = new Date();
+    const currentDayIndex = today.getDay();
+    const distance = targetDayIndex - currentDayIndex;
+    const targetDate = new Date(today);
+    targetDate.setDate(today.getDate() + distance);
+    
+    const offset = targetDate.getTimezoneOffset();
+    const localTargetDate = new Date(targetDate.getTime() - (offset*60*1000));
+    return localTargetDate.toISOString().split('T')[0];
+}
+
+function getMinutesDifference(timeStr) {
+    const now = new Date();
+    const [hours, minutes] = timeStr.split(':').map(Number);
+    const target = new Date();
+    target.setHours(hours, minutes, 0, 0);
+    return (now.getTime() - target.getTime()) / 60000;
+}
+
+function formatTimeAMPM(timeStr) {
+    let [hours, minutes] = timeStr.split(':').map(Number);
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    return `${hours < 10 ? '0' + hours : hours}:${minutes} ${ampm}`;
+}
+
+function updateDateBadge() {
+    const badge = document.getElementById('current-date-badge');
+    if (badge) {
+        const options = { month: 'long', day: 'numeric' };
+        const dateString = new Date().toLocaleDateString('en-US', options);
+        badge.innerText = `Today, ${dateString}`;
+    }
+}
+
+function renderCards() {
+    if (!remindersGrid) return;
+    const medicines = getMedicines();
+    remindersGrid.innerHTML = '';
+    
+    const today = new Date();
+    const offset = today.getTimezoneOffset();
+    const localToday = new Date(today.getTime() - (offset*60*1000));
+    const todayDateKey = localToday.toISOString().split('T')[0];
+    const todayIndex = today.getDay();
+    
+    // Filter to medicines scheduled for today, or just show first 3 for UI purposes if none today
+    let todayMeds = medicines.filter(m => m.days.includes(todayIndex));
+    if (todayMeds.length === 0) todayMeds = medicines.slice(0, 3);
+    else todayMeds = todayMeds.slice(0, 3); // Max 3 cards as per design
+    
+    todayMeds.forEach(med => {
+        const loggedStatus = med.statusLog ? med.statusLog[todayDateKey] : null;
+        let cardClass = 'glass-card';
+        let btnHtml = '';
+        
+        if (loggedStatus === 'taken') {
+            cardClass += ' card-taken';
+            btnHtml = `<button class="action-btn" disabled style="background: var(--color-green); color: #0b1120; border: none;"><i class="fa-solid fa-check"></i> TAKEN</button>`;
+        } else if (loggedStatus === 'missed') {
+            cardClass += ' card-missed';
+            btnHtml = `<button class="action-btn" disabled style="color: var(--color-pink); border-color: var(--color-pink); background: transparent;">MISSED</button>`;
+        } else {
+            cardClass += ' active-card';
+            btnHtml = `<button class="action-btn" onclick="markAsTaken('${med.id}', '${todayDateKey}')">Mark as Taken</button>`;
+        }
+        
+        const cardHtml = `
+            <div class="${cardClass}">
+                ${loggedStatus === 'missed' ? '<div class="missed-badge">Missed</div>' : ''}
+                <div class="card-top">
+                    <div class="time-box"><i class="fa-regular fa-clock"></i> ${formatTimeAMPM(med.time)}</div>
+                    <i class="fa-solid fa-ellipsis menu-dots"></i>
+                </div>
+                <div class="card-icon icon-${med.color || 'cyan'}">
+                    <i class="fa-solid ${med.icon || 'fa-pills'}"></i>
+                </div>
+                <h3 class="med-name">${med.name}</h3>
+                <p class="med-detail">${med.dosage}</p>
+                ${btnHtml}
+            </div>
+        `;
+        remindersGrid.innerHTML += cardHtml;
+    });
+}
+
+function renderWeeklySchedule() {
+    if (!weeklyTableBody) return;
+    const medicines = getMedicines();
+    weeklyTableBody.innerHTML = '';
+    
+    if (medicines.length === 0) return;
+    
+    medicines.forEach(med => {
+        const tr = document.createElement('tr');
+        
+        let rowHtml = `
+            <td><strong>${med.name}</strong><div style="font-size:0.8rem;color:var(--text-secondary)">${med.dosage}</div></td>
+            <td style="font-weight:600;color:var(--color-yellow)">${formatTimeAMPM(med.time)}</td>
+        `;
+        
+        const dayOrder = [1, 2, 3, 4, 5, 6, 0];
+        
+        dayOrder.forEach(dayIndex => {
+            if (med.days.includes(dayIndex)) {
+                const dateKey = getDateForDayThisWeek(dayIndex);
+                const loggedStatus = med.statusLog && med.statusLog[dateKey] ? med.statusLog[dateKey] : null;
+                
+                if (loggedStatus === 'taken') {
+                    rowHtml += `<td><i class="fa-solid fa-check" style="color: var(--color-green); font-size: 1.2rem;"></i></td>`;
+                } else if (loggedStatus === 'missed') {
+                    rowHtml += `<td><i class="fa-solid fa-xmark" style="color: var(--color-pink); font-size: 1.2rem;"></i></td>`;
+                } else {
+                    rowHtml += `<td><i class="fa-regular fa-clock" style="color: var(--color-yellow); font-size: 1.2rem;"></i></td>`;
+                }
+            } else {
+                rowHtml += `<td style="color: rgba(255,255,255,0.2);">-</td>`;
+            }
+        });
+        
+        rowHtml += `<td><button class="table-btn btn-view">View</button></td>`;
+        tr.innerHTML = rowHtml;
+        weeklyTableBody.appendChild(tr);
+    });
+}
+
+window.markAsTaken = function(medId, dateKey) {
+    const medicines = getMedicines();
+    const med = medicines.find(m => m.id === medId);
+    if (med) {
+        if (!med.statusLog) med.statusLog = {};
+        med.statusLog[dateKey] = 'taken';
+        saveMedicines(medicines);
+        renderUI();
+    }
+};
+
+function showToast(title, message, type = 'info') {
+    const container = document.getElementById('toast-container');
+    if (!container) return;
+    
+    const toast = document.createElement('div');
+    toast.className = `toast-notification type-${type}`;
+    
+    const icon = type === 'info' ? 'fa-bell' : 'fa-circle-exclamation';
+    
+    toast.innerHTML = `
+        <i class="fa-solid ${icon} fa-xl"></i>
+        <div>
+            <strong style="display:block; margin-bottom: 0.2rem;">${title}</strong>
+            <span style="font-size: 0.9rem; color: var(--text-secondary);">${message}</span>
+        </div>
+    `;
+    
+    container.appendChild(toast);
+    
+    // Attempt Browser Notification
+    if (Notification && Notification.permission === "granted") {
+        new Notification(title, { body: message });
+    }
+    
+    setTimeout(() => {
+        if (toast.parentNode) toast.parentNode.removeChild(toast);
+    }, 5000);
+}
+
+// Request Notification Permission
+const notifyBtn = document.getElementById('notify-btn');
+if (notifyBtn) {
+    notifyBtn.addEventListener('click', () => {
+        if (Notification && Notification.permission !== "granted") {
+            Notification.requestPermission();
+        }
+    });
+}
+
+function checkMissedDoses() {
+    const medicines = getMedicines();
+    const today = new Date();
+    const todayIndex = today.getDay();
+    
+    const offset = today.getTimezoneOffset();
+    const localToday = new Date(today.getTime() - (offset*60*1000));
+    const todayDateKey = localToday.toISOString().split('T')[0];
+    let changed = false;
+    
+    const missedAlerts = [];
+    
+    medicines.forEach(med => {
+        if (med.days.includes(todayIndex)) {
+            const loggedStatus = med.statusLog ? med.statusLog[todayDateKey] : null;
+            const diff = getMinutesDifference(med.time);
+            const notifyKey = `${med.id}-${todayDateKey}`;
+            
+            if (loggedStatus !== 'taken' && loggedStatus !== 'missed') {
+                // Reminder Alert (between 0 and 2 minutes after)
+                if (diff >= 0 && diff < 2 && !notifiedReminders.has(notifyKey)) {
+                    showToast("Medicine Reminder", `Time to take your medicine: ${med.name}`, 'info');
+                    notifiedReminders.add(notifyKey);
+                }
+                
+                // Missed Alert (Grace period of 30 minutes)
+                if (diff >= 30) {
+                    if (!med.statusLog) med.statusLog = {};
+                    med.statusLog[todayDateKey] = 'missed';
+                    changed = true;
+                    showToast("Missed Dose", `You missed your medicine: ${med.name}`, 'error');
+                }
+            }
+        }
+        
+        if (med.statusLog) {
+            Object.keys(med.statusLog).forEach(dateStr => {
+                if (med.statusLog[dateStr] === 'missed') {
+                    const dateObj = new Date(dateStr + "T00:00:00");
+                    const dayStr = dateStr === todayDateKey ? 'today' : `on ${getDayName(dateObj.getDay())}`;
+                    missedAlerts.push(`You missed ${med.name} ${dayStr} at ${formatTimeAMPM(med.time)}`);
+                }
+            });
+        }
+    });
+    
+    if (changed) {
+        saveMedicines(medicines);
+        renderUI(); // re-render to show missed status
+    }
+    
+    if (missedAlertsContainer) {
+        missedAlertsContainer.innerHTML = '';
+        if (missedAlerts.length > 0) {
+            missedAlerts.forEach(alertText => {
+                const div = document.createElement('div');
+                div.className = 'missed-alert';
+                div.innerHTML = `
+                    <div class="missed-alert-content">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <span>${alertText}</span>
+                    </div>
+                    <button class="table-btn btn-view">View Details</button>
+                `;
+                missedAlertsContainer.appendChild(div);
+            });
+        }
+    }
+}
+
+function renderUI() {
+    updateDateBadge();
+    renderCards();
+    renderWeeklySchedule();
+    checkMissedDoses();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Check permission on load
+    if (Notification && Notification.permission === "default") {
+        Notification.requestPermission();
+    }
+    
+    renderUI();
+    setInterval(checkMissedDoses, 60000);
+});
+
+
 // ==================== DOCTOR ADVICE LOGIC ====================
 const diseaseDatabase = {
     "fever": {
