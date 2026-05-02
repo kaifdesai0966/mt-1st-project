@@ -689,3 +689,84 @@ if (getAdviceBtn && adviceInput && adviceOutput) {
         }
     });
 }
+
+// ==================== FLOATING CHATBOT LOGIC ====================
+const chatbotFab = document.getElementById('chatbot-fab');
+const chatPanel = document.getElementById('chat-panel');
+const closeChatBtn = document.getElementById('close-chat-btn');
+const chatInput = document.getElementById('chat-input');
+const chatSendBtn = document.getElementById('chat-send-btn');
+const chatMessages = document.getElementById('chat-messages');
+
+if (chatbotFab && chatPanel && closeChatBtn) {
+    chatbotFab.addEventListener('click', () => {
+        chatPanel.classList.toggle('hidden');
+        if (!chatPanel.classList.contains('hidden')) {
+            chatInput.focus();
+        }
+    });
+
+    closeChatBtn.addEventListener('click', () => {
+        chatPanel.classList.add('hidden');
+    });
+}
+
+function addChatMessage(message, sender) {
+    const msgDiv = document.createElement('div');
+    msgDiv.className = `chat-message ${sender}`;
+    msgDiv.innerHTML = message;
+    chatMessages.appendChild(msgDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function processChatInput() {
+    const text = chatInput.value.trim();
+    if (!text) return;
+
+    addChatMessage(text, 'user');
+    chatInput.value = '';
+
+    // Simple delay for bot response
+    setTimeout(() => {
+        let found = false;
+        const lowerText = text.toLowerCase();
+        
+        for (const [key, data] of Object.entries(diseaseDatabase)) {
+            if (lowerText.includes(key)) {
+                found = true;
+                // Since we are in chat, we just provide the base advice assuming "no" to severe symptoms
+                // or just outputting the basic medicines and home remedies.
+                const advice = data.getAdvice(false, false);
+                
+                const responseHtml = `
+                    <div class="bot-response-title">${data.name}</div>
+                    <div style="font-size: 0.85rem; margin-bottom: 0.5rem;">${data.analysis}</div>
+                    <div class="bot-response-section">
+                        <span class="bot-response-label">Medicines:</span> ${advice.medicines}
+                    </div>
+                    <div class="bot-response-section">
+                        <span class="bot-response-label">Home Remedies:</span> ${advice.homeRemedies}
+                    </div>
+                    <div class="bot-response-section" style="color: var(--color-pink); font-size: 0.85rem; margin-top: 0.5rem;">
+                        <em>Precaution: If symptoms persist or worsen, please consult a real doctor.</em>
+                    </div>
+                `;
+                addChatMessage(responseHtml, 'bot');
+                break;
+            }
+        }
+
+        if (!found) {
+            addChatMessage("I'm not sure about that symptom. Try describing something like 'fever', 'headache', 'cold', 'cough', 'stomach pain', or 'allergy'.", 'bot');
+        }
+    }, 600);
+}
+
+if (chatSendBtn && chatInput) {
+    chatSendBtn.addEventListener('click', processChatInput);
+    chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            processChatInput();
+        }
+    });
+}

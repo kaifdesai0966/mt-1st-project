@@ -170,6 +170,28 @@
     </div>
 
     <script src="script.js"></script>
+
+    <!-- Floating Chatbot Button -->
+    <button id="chatbot-fab" class="chatbot-fab">
+        <i class="fa-solid fa-user-doctor"></i>
+    </button>
+
+    <!-- Floating Chat Panel -->
+    <div id="chat-panel" class="chat-panel hidden">
+        <div class="chat-header">
+            <h3><i class="fa-solid fa-user-doctor"></i> AI Doctor Advice</h3>
+            <button id="close-chat-btn" class="icon-btn-small"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="chat-messages" id="chat-messages">
+            <div class="chat-message bot">
+                Hi! I'm your AI Doctor Advice assistant. Tell me your symptoms (e.g., "fever", "headache").
+            </div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="chat-input" class="glass-input chat-input-field" placeholder="Type symptoms...">
+            <button id="chat-send-btn" class="btn-primary-small"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+    </div>
 </body>
 
 </html>
