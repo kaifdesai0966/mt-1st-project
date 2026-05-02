@@ -348,7 +348,11 @@ function checkMissedDoses() {
                 if (med.statusLog[dateStr] === 'missed') {
                     const dateObj = new Date(dateStr + "T00:00:00");
                     const dayStr = dateStr === todayDateKey ? 'today' : `on ${getDayName(dateObj.getDay())}`;
-                    missedAlerts.push(`You missed ${med.name} ${dayStr} at ${formatTimeAMPM(med.time)}`);
+                    missedAlerts.push({
+                        name: med.name,
+                        day: dayStr,
+                        time: formatTimeAMPM(med.time)
+                    });
                 }
             });
         }
@@ -362,17 +366,46 @@ function checkMissedDoses() {
     if (missedAlertsContainer) {
         missedAlertsContainer.innerHTML = '';
         if (missedAlerts.length > 0) {
-            missedAlerts.forEach(alertText => {
-                const div = document.createElement('div');
-                div.className = 'missed-alert';
-                div.innerHTML = `
-                    <div class="missed-alert-content">
-                        <i class="fa-solid fa-circle-exclamation"></i>
-                        <span>${alertText}</span>
+            const summaryHTML = `
+                <div class="missed-panel-summary" id="missed-panel-summary">
+                    <div class="missed-panel-header">
+                        <i class="fa-solid fa-circle-exclamation alert-icon"></i>
+                        <div class="missed-panel-titles">
+                            <h4>You missed ${missedAlerts.length} medicine${missedAlerts.length > 1 ? 's' : ''}</h4>
+                            <p>Tap to view all</p>
+                        </div>
                     </div>
-                    <button class="table-btn btn-view">View Details</button>
+                    <i class="fa-solid fa-chevron-down arrow-icon" id="missed-panel-arrow"></i>
+                </div>
+            `;
+            
+            let listHTML = `<div class="missed-panel-list hidden" id="missed-panel-list">`;
+            missedAlerts.forEach(alert => {
+                listHTML += `
+                    <div class="missed-alert-item">
+                        <div class="missed-alert-content">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                            <span>You missed <strong>${alert.name}</strong> ${alert.day} at ${alert.time}</span>
+                        </div>
+                        <button class="table-btn btn-view">View Details</button>
+                    </div>
                 `;
-                missedAlertsContainer.appendChild(div);
+            });
+            listHTML += `</div>`;
+            
+            const panelDiv = document.createElement('div');
+            panelDiv.className = 'missed-collapsible-panel';
+            panelDiv.innerHTML = summaryHTML + listHTML;
+            missedAlertsContainer.appendChild(panelDiv);
+
+            // Add toggle event listener
+            const summaryEl = document.getElementById('missed-panel-summary');
+            const listEl = document.getElementById('missed-panel-list');
+            const arrowEl = document.getElementById('missed-panel-arrow');
+
+            summaryEl.addEventListener('click', () => {
+                listEl.classList.toggle('hidden');
+                arrowEl.classList.toggle('rotated');
             });
         }
     }
@@ -719,6 +752,44 @@ function addChatMessage(message, sender) {
     chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
+const chatDiseases = [
+  {
+    name: "Fever",
+    symptoms: ["fever", "high temperature", "chills", "body pain", "hot"],
+    medicine: "Paracetamol",
+    remedies: "Drink warm fluids, take rest",
+    precautions: "Stay hydrated, monitor temperature"
+  },
+  {
+    name: "Cold",
+    symptoms: ["runny nose", "sneezing", "sore throat", "cold", "cough"],
+    medicine: "Antihistamines",
+    remedies: "Steam inhalation, warm fluids",
+    precautions: "Avoid cold food"
+  },
+  {
+    name: "Headache",
+    symptoms: ["head pain", "pressure", "migraine", "headache", "head hurts"],
+    medicine: "Ibuprofen",
+    remedies: "Rest in dark room",
+    precautions: "Reduce screen time"
+  },
+  {
+    name: "Stomach Pain",
+    symptoms: ["stomach pain", "ache", "cramps", "belly", "indigestion", "acidity"],
+    medicine: "Antacids",
+    remedies: "Drink peppermint tea, warm compress",
+    precautions: "Avoid spicy and heavy food"
+  },
+  {
+    name: "Allergy",
+    symptoms: ["allergy", "itchy", "rash", "redness", "watery eyes"],
+    medicine: "Cetirizine or Loratadine",
+    remedies: "Cold compress",
+    precautions: "Avoid allergens, stay indoors if pollen is high"
+  }
+];
+
 function processChatInput() {
     const text = chatInput.value.trim();
     if (!text) return;
@@ -726,40 +797,63 @@ function processChatInput() {
     addChatMessage(text, 'user');
     chatInput.value = '';
 
-    // Simple delay for bot response
+    // Add typing animation
+    const typingMsg = document.createElement('div');
+    typingMsg.className = 'chat-message bot typing';
+    typingMsg.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin" style="margin-right: 0.5rem; color: var(--color-cyan);"></i> Analyzing...';
+    chatMessages.appendChild(typingMsg);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    // Simulate delay (1.5 sec)
     setTimeout(() => {
-        let found = false;
-        const lowerText = text.toLowerCase();
-        
-        for (const [key, data] of Object.entries(diseaseDatabase)) {
-            if (lowerText.includes(key)) {
-                found = true;
-                // Since we are in chat, we just provide the base advice assuming "no" to severe symptoms
-                // or just outputting the basic medicines and home remedies.
-                const advice = data.getAdvice(false, false);
-                
-                const responseHtml = `
-                    <div class="bot-response-title">${data.name}</div>
-                    <div style="font-size: 0.85rem; margin-bottom: 0.5rem;">${data.analysis}</div>
-                    <div class="bot-response-section">
-                        <span class="bot-response-label">Medicines:</span> ${advice.medicines}
-                    </div>
-                    <div class="bot-response-section">
-                        <span class="bot-response-label">Home Remedies:</span> ${advice.homeRemedies}
-                    </div>
-                    <div class="bot-response-section" style="color: var(--color-pink); font-size: 0.85rem; margin-top: 0.5rem;">
-                        <em>Precaution: If symptoms persist or worsen, please consult a real doctor.</em>
-                    </div>
-                `;
-                addChatMessage(responseHtml, 'bot');
-                break;
-            }
+        // Remove typing animation
+        if (typingMsg.parentNode) {
+            typingMsg.parentNode.removeChild(typingMsg);
         }
 
-        if (!found) {
-            addChatMessage("I'm not sure about that symptom. Try describing something like 'fever', 'headache', 'cold', 'cough', 'stomach pain', or 'allergy'.", 'bot');
+        const lowerText = text.toLowerCase();
+        let bestMatch = null;
+        let highestScore = 0;
+
+        // Match symptoms
+        chatDiseases.forEach(disease => {
+            let score = 0;
+            disease.symptoms.forEach(sym => {
+                if (lowerText.includes(sym)) {
+                    score++;
+                }
+            });
+            if (score > highestScore) {
+                highestScore = score;
+                bestMatch = disease;
+            }
+        });
+
+        if (bestMatch && highestScore > 0) {
+            const responseHtml = `
+                <div style="margin-bottom: 0.5rem; line-height: 1.6;">
+                    <div style="color: var(--color-cyan); font-weight: 600; font-size: 1.05rem; margin-bottom: 0.3rem;">Condition: ${bestMatch.name}</div>
+                    <div><span class="bot-response-label">Medicine:</span> <span style="color: #fff;">${bestMatch.medicine}</span></div>
+                    <div><span class="bot-response-label">Home Remedies:</span> <span style="color: #fff;">${bestMatch.remedies}</span></div>
+                    <div><span class="bot-response-label">Precautions:</span> <span style="color: #fff;">${bestMatch.precautions}</span></div>
+                </div>
+                <div style="font-size: 0.8rem; color: var(--color-pink); border-top: 1px solid rgba(255,255,255,0.1); padding-top: 0.5rem; margin-top: 0.5rem;">
+                    <em>This is general advice. Consult a doctor for serious conditions.</em>
+                </div>
+            `;
+            addChatMessage(responseHtml, 'bot');
+        } else {
+            const fallbackHtml = `
+                <div style="margin-bottom: 0.5rem; color: #fff;">
+                    No clear match found. Please consult a doctor.
+                </div>
+                <div style="font-size: 0.8rem; color: var(--color-pink); border-top: 1px solid rgba(255,255,255,0.1); padding-top: 0.5rem; margin-top: 0.5rem;">
+                    <em>This is general advice. Consult a doctor for serious conditions.</em>
+                </div>
+            `;
+            addChatMessage(fallbackHtml, 'bot');
         }
-    }, 600);
+    }, 1500);
 }
 
 if (chatSendBtn && chatInput) {

@@ -785,11 +785,110 @@ body {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    width: 100%;
 }
 
-.missed-alert {
-    background: rgba(244, 114, 182, 0.1);
+.missed-collapsible-panel {
+    background: rgba(244, 114, 182, 0.05);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border: 1px solid rgba(244, 114, 182, 0.3);
+    border-radius: 20px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(244, 114, 182, 0.1);
+}
+
+.missed-collapsible-panel:hover {
+    box-shadow: 0 6px 25px rgba(244, 114, 182, 0.2);
+    border-color: rgba(244, 114, 182, 0.5);
+}
+
+.missed-panel-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem 2rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.missed-panel-summary:hover {
+    background: rgba(244, 114, 182, 0.1);
+}
+
+.missed-panel-header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.alert-icon {
+    font-size: 2rem;
+    color: var(--color-pink);
+    text-shadow: 0 0 10px rgba(244, 114, 182, 0.5);
+}
+
+.missed-panel-titles h4 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--color-pink);
+    margin-bottom: 0.3rem;
+}
+
+.missed-panel-titles p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.arrow-icon {
+    font-size: 1.5rem;
+    color: var(--text-secondary);
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.missed-panel-summary:hover .arrow-icon {
+    color: var(--color-pink);
+}
+
+.arrow-icon.rotated {
+    transform: rotate(180deg);
+    color: var(--color-pink);
+}
+
+.missed-panel-list {
+    max-height: 400px;
+    overflow-y: auto;
+    border-top: 1px solid rgba(244, 114, 182, 0.2);
+    padding: 1rem 2rem 2rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    transition: max-height 0.5s ease, opacity 0.5s ease, padding 0.5s ease;
+    opacity: 1;
+}
+
+.missed-panel-list.hidden {
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    opacity: 0;
+    border-top: none;
+    pointer-events: none;
+}
+
+.missed-panel-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.missed-panel-list::-webkit-scrollbar-thumb {
+    background: rgba(244, 114, 182, 0.3);
+    border-radius: 3px;
+}
+
+.missed-alert-item {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.05);
     padding: 1rem 1.5rem;
     border-radius: 15px;
     display: flex;
@@ -797,7 +896,13 @@ body {
     justify-content: space-between;
     gap: 1rem;
     color: var(--text-primary);
-    animation: fadeIn 0.4s ease;
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.missed-alert-item:hover {
+    background: rgba(0, 0, 0, 0.3);
+    transform: translateX(5px);
+    border-color: rgba(244, 114, 182, 0.2);
 }
 
 .missed-alert-content {
@@ -806,9 +911,18 @@ body {
     gap: 1rem;
 }
 
-.missed-alert i {
+.missed-alert-content i {
     color: var(--color-pink);
-    font-size: 1.5rem;
+    font-size: 1.2rem;
+}
+
+.missed-alert-content span {
+    font-size: 0.95rem;
+}
+
+.missed-alert-content strong {
+    color: #fff;
+    font-weight: 500;
 }
 
 @keyframes fadeIn {
@@ -986,6 +1100,7 @@ body {
 .chat-messages::-webkit-scrollbar {
     width: 6px;
 }
+
 .chat-messages::-webkit-scrollbar-thumb {
     background: rgba(255, 255, 255, 0.2);
     border-radius: 3px;
