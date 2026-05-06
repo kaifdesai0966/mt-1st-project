@@ -30,6 +30,28 @@ const STORAGE_KEY = 'aura_medicines';
 
 // Track already notified reminders in this session so we don't spam
 const notifiedReminders = new Set();
+const notifiedEmails = new Set();
+
+// Backend API Integration
+async function sendEmailNotification(to, subject, message) {
+    try {
+        const response = await fetch('http://localhost:3000/send-email', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ to, subject, message })
+        });
+        const data = await response.json();
+        if (data.success) {
+            showToast("Email sent", `Notification delivered to ${to}`, 'info');
+        } else {
+            console.error("Failed to send email:", data.error);
+        }
+    } catch (err) {
+        console.error("Error connecting to email service:", err);
+    }
+}
 
 function getMedicines() {
     let meds = JSON.parse(localStorage.getItem(STORAGE_KEY));
@@ -339,6 +361,30 @@ function checkMissedDoses() {
                     med.statusLog[todayDateKey] = 'missed';
                     changed = true;
                     showToast("Missed Dose", `You missed your medicine: ${med.name}`, 'error');
+                }
+            }
+            
+            // EMAIL NOTIFICATION LOGIC
+            const emailEnabled = localStorage.getItem('emailNotificationsEnabled') === 'true';
+            const userEmail = localStorage.getItem('loggedInUser');
+            
+            if (emailEnabled && userEmail) {
+                const emailReminderKey = `email-rem-${med.id}-${todayDateKey}`;
+                const emailMissedKey = `email-miss-${med.id}-${todayDateKey}`;
+                
+                // Round diff to nearest integer to avoid multiple triggers
+                const roundedDiff = Math.round(diff);
+                
+                // Reminder Alert: 1 min before
+                if (roundedDiff === -1 && !notifiedEmails.has(emailReminderKey)) {
+                    sendEmailNotification(userEmail, "Medicine Reminder", `Sir, it's time for medication in 1 minute for ${med.name}`);
+                    notifiedEmails.add(emailReminderKey);
+                }
+                
+                // Missed Alert: 5 mins after
+                if (roundedDiff >= 5 && roundedDiff <= 6 && loggedStatus !== 'taken' && !notifiedEmails.has(emailMissedKey)) {
+                    sendEmailNotification(userEmail, "Missed Medicine Alert", `You missed your medicine ${med.name} scheduled at ${formatTimeAMPM(med.time)}`);
+                    notifiedEmails.add(emailMissedKey);
                 }
             }
         }
@@ -864,3 +910,180 @@ if (chatSendBtn && chatInput) {
         }
     });
 }
+
+// ==================== AUTHENTICATION LOGIC ====================
+document.addEventListener('DOMContentLoaded', () => {
+    const authContainer = document.getElementById('auth-section');
+    const loginContainer = document.getElementById('login-container');
+    const signupContainer = document.getElementById('signup-container');
+    const appContainer = document.querySelector('.app-container');
+    
+    // Email Toggle Logic
+    const emailToggleWrapper = document.getElementById('email-toggle-wrapper');
+    const emailToggle = document.getElementById('email-toggle');
+    
+    if (emailToggle) {
+        emailToggle.checked = localStorage.getItem('emailNotificationsEnabled') === 'true';
+        emailToggle.addEventListener('change', (e) => {
+            localStorage.setItem('emailNotificationsEnabled', e.target.checked);
+        });
+    }
+    
+    // Toggle between login and signup
+    const showSignupBtn = document.getElementById('show-signup');
+    const showLoginBtn = document.getElementById('show-login');
+    if(showSignupBtn) {
+        showSignupBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            loginContainer.classList.add('hidden');
+            signupContainer.classList.remove('hidden');
+        });
+    }
+    
+    if(showLoginBtn) {
+        showLoginBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            signupContainer.classList.add('hidden');
+            loginContainer.classList.remove('hidden');
+        });
+    }
+
+    // Password visibility toggle
+    document.querySelectorAll('.toggle-password').forEach(icon => {
+        icon.addEventListener('click', function() {
+            const targetId = this.getAttribute('data-target');
+            const input = document.getElementById(targetId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                this.classList.remove('fa-eye');
+                this.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                this.classList.remove('fa-eye-slash');
+                this.classList.add('fa-eye');
+            }
+        });
+    });
+
+    // Handle Signup
+    const signupForm = document.getElementById('signup-form');
+    if(signupForm) {
+        signupForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('signup-email').value.trim();
+            const password = document.getElementById('signup-password').value;
+            const confirmPassword = document.getElementById('signup-confirm-password').value;
+            const errorDiv = document.getElementById('signup-error');
+            
+            errorDiv.textContent = '';
+            
+            // Basic email regex
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                errorDiv.textContent = 'Invalid email format';
+                return;
+            }
+            
+            if (password.length < 6) {
+                errorDiv.textContent = 'Password must be at least 6 characters';
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                errorDiv.textContent = 'Password mismatch';
+                return;
+            }
+            
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+            if (users.find(u => u.email === email)) {
+                errorDiv.textContent = 'User already exists';
+                return;
+            }
+            
+            users.push({ email, password: btoa(password) });
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            // Auto login after signup
+            loginUser(email);
+        });
+    }
+
+    // Handle Login
+    const loginForm = document.getElementById('login-form');
+    if(loginForm) {
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+            const errorDiv = document.getElementById('login-error');
+            
+            errorDiv.textContent = '';
+            
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+            const user = users.find(u => u.email === email);
+            
+            if (!user) {
+                errorDiv.textContent = 'User not found';
+                return;
+            }
+            
+            if (atob(user.password) !== password) {
+                errorDiv.textContent = 'Incorrect password';
+                return;
+            }
+            
+            loginUser(email);
+        });
+    }
+
+    // Handle Logout
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+            localStorage.removeItem('loggedInUser');
+            authContainer.classList.remove('hidden');
+            appContainer.style.display = 'none';
+            // Hide floating buttons
+            const chatbotFab = document.getElementById('chatbot-fab');
+            if(chatbotFab) chatbotFab.style.display = 'none';
+            if(emailToggleWrapper) emailToggleWrapper.style.display = 'none';
+            const chatPanel = document.getElementById('chat-panel');
+            if(chatPanel) chatPanel.classList.add('hidden');
+            
+            if(loginForm) loginForm.reset();
+            if(signupForm) signupForm.reset();
+            loginContainer.classList.remove('hidden');
+            signupContainer.classList.add('hidden');
+            document.getElementById('login-error').textContent = '';
+            document.getElementById('signup-error').textContent = '';
+        });
+    }
+
+    function loginUser(email) {
+        localStorage.setItem('loggedInUser', email);
+        authContainer.classList.add('hidden');
+        appContainer.style.display = 'flex'; // Original container is flex
+        const chatbotFab = document.getElementById('chatbot-fab');
+        if(chatbotFab) chatbotFab.style.display = 'flex';
+        if(emailToggleWrapper) emailToggleWrapper.style.display = 'flex';
+        const userWelcome = document.getElementById('user-welcome');
+        if(userWelcome) userWelcome.textContent = `Welcome, ${email}`;
+    }
+
+    // Session Management check
+    const loggedInUser = localStorage.getItem('loggedInUser');
+    if (loggedInUser) {
+        authContainer.classList.add('hidden');
+        appContainer.style.display = 'flex';
+        const chatbotFab = document.getElementById('chatbot-fab');
+        if(chatbotFab) chatbotFab.style.display = 'flex';
+        if(emailToggleWrapper) emailToggleWrapper.style.display = 'flex';
+        const userWelcome = document.getElementById('user-welcome');
+        if(userWelcome) userWelcome.textContent = `Welcome, ${loggedInUser}`;
+    } else {
+        authContainer.classList.remove('hidden');
+        appContainer.style.display = 'none';
+        const chatbotFab = document.getElementById('chatbot-fab');
+        if(chatbotFab) chatbotFab.style.display = 'none';
+    }
+});

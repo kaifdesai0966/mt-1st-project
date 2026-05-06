@@ -19,6 +19,58 @@
         <div class="shape shape-3"></div>
     </div>
 
+    <!-- Auth Section -->
+    <div id="auth-section" class="auth-container">
+        <!-- Login Form -->
+        <div id="login-container" class="auth-card glass-card">
+            <h2 class="auth-title">Welcome Back</h2>
+            <form id="login-form">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="login-email" class="glass-input" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <div class="password-input-group">
+                        <input type="password" id="login-password" class="glass-input" required>
+                        <i class="fa-regular fa-eye toggle-password" data-target="login-password"></i>
+                    </div>
+                </div>
+                <div id="login-error" class="auth-error"></div>
+                <button type="submit" class="btn-primary w-100" id="login-btn">Login</button>
+            </form>
+            <p class="auth-switch">Don't have an account? <a href="#" id="show-signup">Sign up</a></p>
+        </div>
+
+        <!-- Signup Form -->
+        <div id="signup-container" class="auth-card glass-card hidden">
+            <h2 class="auth-title">Create Account</h2>
+            <form id="signup-form">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="signup-email" class="glass-input" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <div class="password-input-group">
+                        <input type="password" id="signup-password" class="glass-input" required>
+                        <i class="fa-regular fa-eye toggle-password" data-target="signup-password"></i>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Confirm Password</label>
+                    <div class="password-input-group">
+                        <input type="password" id="signup-confirm-password" class="glass-input" required>
+                        <i class="fa-regular fa-eye toggle-password" data-target="signup-confirm-password"></i>
+                    </div>
+                </div>
+                <div id="signup-error" class="auth-error"></div>
+                <button type="submit" class="btn-primary w-100" id="signup-btn">Sign Up</button>
+            </form>
+            <p class="auth-switch">Already have an account? <a href="#" id="show-login">Login</a></p>
+        </div>
+    </div>
+
     <div class="app-container">
         <!-- Glass Navigation -->
         <nav class="glass-nav">
@@ -30,7 +82,18 @@
                 <li><a href="#schedule">Schedule</a></li>
                 <li><a href="#insights">Insights</a></li>
             </ul>
-            <button class="icon-btn"><i class="fa-regular fa-bell"></i></button>
+            <div style="display: flex; align-items: center; gap: 1.5rem;">
+                <div class="email-toggle-container" id="email-toggle-wrapper" style="display: none;">
+                    <span class="email-toggle-label" style="font-size: 0.9rem; color: var(--text-secondary); margin-right: 0.5rem;"><i class="fa-regular fa-envelope"></i> Emails</span>
+                    <label class="switch">
+                        <input type="checkbox" id="email-toggle">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+                <span id="user-welcome" class="user-welcome"></span>
+                <button id="logout-btn" class="btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.9rem;">Logout</button>
+                <button class="icon-btn" style="margin-left: 0.5rem;"><i class="fa-regular fa-bell"></i></button>
+            </div>
         </nav>
 
         <!-- Hero Section -->

@@ -799,6 +799,104 @@ body {
     box-shadow: 0 4px 20px rgba(244, 114, 182, 0.1);
 }
 
+/* ==================== AUTHENTICATION ==================== */
+.auth-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #0b1120;
+    z-index: 2000;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.auth-container.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.95);
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 400px;
+    padding: 3rem 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    position: absolute;
+    transition: all 0.4s ease;
+}
+
+.auth-card.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(20px);
+}
+
+.auth-title {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--color-cyan);
+    margin-bottom: 1rem;
+}
+
+.password-input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-input-group .glass-input {
+    width: 100%;
+    padding-right: 3rem;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 1.2rem;
+    cursor: pointer;
+    color: var(--text-secondary);
+    transition: color 0.3s ease;
+}
+
+.toggle-password:hover {
+    color: var(--text-primary);
+}
+
+.auth-switch {
+    text-align: center;
+    margin-top: 1.5rem;
+    color: var(--text-secondary);
+}
+
+.auth-switch a {
+    color: var(--color-cyan);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.auth-switch a:hover {
+    text-decoration: underline;
+}
+
+.auth-error {
+    color: var(--color-pink);
+    font-size: 0.9rem;
+    text-align: center;
+    min-height: 1.2rem;
+}
+
+.user-welcome {
+    color: var(--color-cyan);
+    font-weight: 500;
+    margin-right: 1.5rem;
+}
+
 .missed-collapsible-panel:hover {
     box-shadow: 0 6px 25px rgba(244, 114, 182, 0.2);
     border-color: rgba(244, 114, 182, 0.5);
@@ -1003,7 +1101,70 @@ body {
     }
 }
 
-/* ==================== FLOATING CHATBOT ==================== */
+/* ==================== TOGGLE SWITCH ==================== */
+.email-toggle-container {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.4rem 1rem;
+    border-radius: 30px;
+    border: 1px solid var(--glass-border);
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.1);
+    transition: .4s;
+    border: 1px solid var(--glass-border);
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 3px;
+    bottom: 3px;
+    background-color: var(--text-secondary);
+    transition: .4s;
+}
+
+input:checked+.slider {
+    background-color: var(--color-cyan);
+    border-color: var(--color-cyan);
+}
+
+input:checked+.slider:before {
+    transform: translateX(20px);
+    background-color: #0b1120;
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
 .chatbot-fab {
     position: fixed;
     bottom: 30px;
@@ -1020,7 +1181,18 @@ body {
     z-index: 1000;
     transition: all 0.3s ease;
     display: flex;
-    justify-content: center;
+
+    Add a complete user authentication system to the existing medicine reminder website. IMPORTANT: - Do NOT modify the current UI (reminder cards, weekly table, chatbot, notifications) - Authentication should appear as a full-screen overlay or separate section before the main app ---------------------------------- AUTH SCREENS ---------------------------------- Create two forms: 1. Sign Up 2. Login Fields: Signup: - Email - Password - Confirm Password Login: - Email - Password ---------------------------------- SHOW / HIDE PASSWORD FEATURE ---------------------------------- - Add an eye icon inside password input field - Clicking the eye should: - Toggle password visibility (text ↔ password) - Change icon (open eye / closed eye) Apply this for: - Password field (login) - Password+Confirm Password (signup) ---------------------------------- UI DESIGN ---------------------------------- - Match existing dark theme+glassmorphism - Centered card layout - Rounded inputs and buttons - Smooth transitions between login and signup ---------------------------------- VALIDATION ---------------------------------- - Email must be valid format - Password must be at least 6 characters - Confirm password must match - Show error messages: - Invalid email - Password mismatch - User not found - Incorrect password ---------------------------------- DATA STORAGE (FRONTEND) ---------------------------------- - Store users in localStorage: users=[ {
+        email: "...", password: "encoded_password"
+    }
+
+    ] - Encode password using basic encoding (btoa) ---------------------------------- SESSION MANAGEMENT ---------------------------------- - On login success: localStorage.setItem("loggedInUser", email) - On page load: - If loggedInUser exists → show main app - Else → show login screen ---------------------------------- LOGOUT FEATURE ---------------------------------- - Add "Logout" button in top-right of main UI - On click: - Remove loggedInUser from localStorage - Redirect back to login/signup screen ---------------------------------- NAVIGATION ---------------------------------- - Toggle between login and signup using links: "Don't have an account? Sign up"
+    "Already have an account? Login"
+
+    ---------------------------------- EXTRA FEATURES ---------------------------------- - Show "Welcome, user@email.com" after login - Smooth fade/slide animations - Disable button until inputs are valid ---------------------------------- TECHNICAL ---------------------------------- - Use HTML,
+    CSS,
+    JavaScript only - No backend required - Use DOM manipulation to switch views - Everything in one file ---------------------------------- IMPORTANT ---------------------------------- - After logout,
+    user must return to login screen - Keep UI clean and responsive - Do NOT break existing app functionality ---------------------------------- OUTPUT ---------------------------------- Provide complete working code with comments justify-content: center;
     align-items: center;
 }
 
